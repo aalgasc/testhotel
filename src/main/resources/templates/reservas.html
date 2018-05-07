@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Gestión Reservas</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+</head>
+<body>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			console.log("ready funcion ejecutada");
+			obtener_reservas();
+			
+			
+		});
+		
+		function obtener_reservas () {
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+				url: "http://localhost:8081/reservas/listareservas",
+				dataType: 'json',
+				cache: false,
+				timeout : 60000,
+				success: function (result) {
+					fila = "<tr><th><p>ID Reserva </p></th><th><p>Fecha Inicio </p></th><th><p>Fecha Fin</p></th></tr>";
+					$("#tbl_reservas").append(fila);
+					$.each (result, function(i, registro){
+						
+						console.log("Dato ", registro.idreserva);
+						fila = "<tr><td>"+registro.fechainicio+"</td><td>"
+						+ registro.descripcion+"</p></td><td>"+registro.fechafin+"</td></tr>" ;
+						$("#tbl_reservas").append(fila);
+					})
+					
+				},
+			error: function (e) {
+				console.log("ERROR : ", e);
+			}
+			});	
+		}
+		
+	</script>
+
+	<h1>Estado de las reservas</h1>
+	<div>
+		<table id="tbl_reservas">
+		</table>
+
+</body>
+</html>
